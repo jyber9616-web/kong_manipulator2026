@@ -6,6 +6,10 @@
 
 --- 
 
-wsl 설치
-github 동기화
-ros2 설치-jazzy (https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html) 
+wsl 설치  
+github 동기화  
+ros2 설치-jazzy (https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html)   
+turtlesim turtle_node 실행해보기 
+topic, action, service 공부 
+
+---
