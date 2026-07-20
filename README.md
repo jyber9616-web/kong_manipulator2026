@@ -6,4 +6,5 @@
 
 --- 
 
-wsl 설치, github 동기화
+wsl 설치
+github 동기화
