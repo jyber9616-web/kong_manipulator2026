@@ -1,1 +1,0 @@
-~ > opt > ros > jazzy > bin > ./ros2 > ... > source setup.bash > ros2 > ~ > ls -al >(파일열기 bashrc source /opt/ros/jazzy/setup.bash 넣기) > 한쪽 talker, 한쪽 listener
