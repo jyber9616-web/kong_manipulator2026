@@ -5,7 +5,7 @@ from std_msgs.msg import String
 
 class M_pub(Node):
     def __init__(self):
-        super().__init__("massage_pub")  # 노드 이름
+        super().__init__("message_pub")  # 노드 이름
         # timer 등록
         self.create_timer(1, self.timer_callback)
         self.pub = self.create_publisher(String, "message", 10)
