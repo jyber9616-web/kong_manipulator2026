@@ -4,7 +4,7 @@
   <name>user_interface</name>
   <version>0.0.0</version>
   <description>user interface for test</description>
-  <maintainer email="freshmea@naver.com">choisugil</maintainer>
+  <maintainer email="jyber9616@gmail.com">jyber9616</maintainer>
   <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
