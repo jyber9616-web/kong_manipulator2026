@@ -6,12 +6,11 @@ from std_msgs.msg import String
 class M_sub(Node):
     def __init__(self):
         super().__init__("massage_sub")  # 노드 이름
-        # timer 등록
+        # subscription callback 등록
         self.create_subscription(String, "message", self.sub_callback, 10)
 
     def sub_callback(self, msg: String):
         self.get_logger().info(msg.data)
-        
 
 
 def main(args=None):

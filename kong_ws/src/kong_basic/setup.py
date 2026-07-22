@@ -38,6 +38,10 @@ setup(
             "drift_turtle = kong_basic.drift_turtle:main",
             "qos_test_pub = kong_basic.qos_test_pub:main",
             "qos_test_sub = kong_basic.qos_test_sub:main",
+            "user_int_pub = kong_basic.user_int_pub:main",
+            "service_server = kong_basic.service_server:main",
+            "service_thread_server = kong_basic.service_thread_server:main",
+            "service_client = kong_basic.service_client:main",
         ],
     },
 )
