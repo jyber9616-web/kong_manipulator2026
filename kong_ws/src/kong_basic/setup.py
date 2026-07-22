@@ -36,6 +36,8 @@ setup(
             "time_sub = kong_basic.time_sub:main",
             "mv_turtle = kong_basic.mv_turtle:main",
             "drift_turtle = kong_basic.drift_turtle:main",
+            "qos_test_pub = kong_basic.qos_test_pub:main",
+            "qos_test_sub = kong_basic.qos_test_sub:main",
         ],
     },
 )
