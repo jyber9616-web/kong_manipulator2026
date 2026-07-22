@@ -14,7 +14,8 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + "/launch", glob(os.path.join("launch",
-                                                                 "*.launch.py")))
+                                                                 "*.launch.py"))),
+        ("share/" + package_name + "/param", glob(os.path.join("param", "*.yaml"))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -42,6 +43,8 @@ setup(
             "service_server = kong_basic.service_server:main",
             "service_thread_server = kong_basic.service_thread_server:main",
             "service_client = kong_basic.service_client:main",
+            "my_param = kong_basic.my_param:main",
+            "param_async = kong_basic.param_async:main",
         ],
     },
 )
