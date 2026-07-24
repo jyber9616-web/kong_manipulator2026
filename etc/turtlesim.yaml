@@ -13,4 +13,13 @@
           reliability: reliable
     start_type_description_service: true
     use_sim_time: false
-
+/turtle1/move_turtle:
+  ros__parameters:
+    option: first
+    start_type_description_service: true
+    use_sim_time: false
+/turtle2/move_turtle:
+  ros__parameters:
+    option: second
+    start_type_description_service: true
+    use_sim_time: false

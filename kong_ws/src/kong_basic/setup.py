@@ -45,6 +45,9 @@ setup(
             "service_client = kong_basic.service_client:main",
             "my_param = kong_basic.my_param:main",
             "param_async = kong_basic.param_async:main",
+            "action_server = kong_basic.action_server:main",
+            "action_thread_server = kong_basic.action_thread_server:main",
+            "action_client = kong_basic.action_client:main",
         ],
     },
 )
