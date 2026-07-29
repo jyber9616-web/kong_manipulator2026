@@ -19,10 +19,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ju',
-    maintainer_email='jyber9616@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='student',
+    maintainer_email='student@example.com',
+    description='ROS 2 basic tutorial nodes',
+    license='Apache-2.0',
     extras_require={
         'test': [
             'pytest',
@@ -36,6 +36,7 @@ setup(
             "header_pub = kong_basic.header_pub:main",
             "time_sub = kong_basic.time_sub:main",
             "mv_turtle = kong_basic.mv_turtle:main",
+            "mv_turtle_ns = kong_basic.mv_turtle_ns:main",
             "drift_turtle = kong_basic.drift_turtle:main",
             "qos_test_pub = kong_basic.qos_test_pub:main",
             "qos_test_sub = kong_basic.qos_test_sub:main",

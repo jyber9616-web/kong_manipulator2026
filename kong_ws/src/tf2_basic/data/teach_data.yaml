@@ -1,0 +1,79 @@
+joint_names:
+- joint1
+- joint2
+- joint3
+- joint4
+joint_limits:
+  joint1:
+  - -3.14159265359
+  - 3.14159265359
+  joint2:
+  - -1.5
+  - 1.5
+  joint3:
+  - -1.5
+  - 1.4
+  joint4:
+  - -1.7
+  - 1.97
+gripper_limits: [-0.011, 0.02]
+randomization:
+  variation_ratio: 0.0
+  shuffle_patterns: false
+  shuffle_steps: false
+execution:
+  repeat_count: 1
+  default_duration: 1.0
+  default_pause: 0.2
+  gripper_max_effort: 5.0
+patterns:
+- name: test
+  steps:
+  - positions:
+    - 0.360485
+    - -0.348214
+    - 0.15033
+    - 1.089126
+    gripper: 0.017873
+    duration: 1.0
+    pause: 0.2
+  - positions:
+    - 0.319068
+    - -0.526155
+    - -0.460194
+    - 1.027767
+    gripper: 0.017856
+    duration: 1.0
+    pause: 0.2
+  - positions:
+    - 1.724194
+    - -0.289922
+    - 0.136524
+    - 0.633534
+    gripper: 0.017856
+    duration: 1.0
+    pause: 0.2
+  - positions:
+    - 0.61666
+    - -0.362019
+    - 0.610524
+    - 1.012427
+    gripper: 0.017873
+    duration: 1.0
+    pause: 0.2
+  - positions:
+    - -0.794602
+    - -0.072097
+    - 0.651942
+    - 1.012427
+    gripper: 0.017873
+    duration: 1.0
+    pause: 0.2
+  - positions:
+    - -0.644272
+    - -0.386563
+    - -0.674952
+    - 0.840621
+    gripper: 0.017873
+    duration: 1.0
+    pause: 0.2

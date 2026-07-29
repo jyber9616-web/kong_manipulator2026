@@ -3,9 +3,17 @@
 <package format="3">
   <name>kong_basic</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="jyber9616@gmail.com">ju</maintainer>
-  <license>Apache 2.0</license>
+  <description>ROS 2 basic tutorial nodes</description>
+  <maintainer email="student@example.com">student</maintainer>
+  <license>Apache-2.0</license>
+
+  <depend>action_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>turtlesim</depend>
+  <depend>user_interface</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

@@ -1,0 +1,515 @@
+<?xml version="1.0"?>
+<robot name="macroed" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="width" value="0.2" />
+  <xacro:property name="leglen" value="0.6" />
+  <xacro:property name="polelen" value="0.2" />
+  <xacro:property name="bodylen" value="0.6" />
+  <xacro:property name="baselen" value="0.4" />
+  <xacro:property name="wheeldiam" value="0.07" />
+  <!--
+    박스의 관성 모멘트 계산
+
+    x, y, z : 박스 크기
+    mass    : 질량
+
+    Ixx = 1/12 * m * (y² + z²)
+    Iyy = 1/12 * m * (x² + z²)
+    Izz = 1/12 * m * (x² + y²)
+  -->
+  <xacro:macro name="box_inertial"
+               params="mass x y z origin_xyz:='0 0 0' origin_rpy:='0 0 0'">
+    <inertial>
+      <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+
+      <mass value="${mass}"/>
+
+      <inertia
+        ixx="${mass * (y*y + z*z) / 12.0}"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="${mass * (x*x + z*z) / 12.0}"
+        iyz="0.0"
+        izz="${mass * (x*x + y*y) / 12.0}"/>
+    </inertial>
+  </xacro:macro>
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0.05 0.05 1"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0.05 0.7 0.1 1"/>
+  </material>
+
+  <material name="yellow">
+    <color rgba="0.95 0.75 0.05 1"/>
+  </material>
+
+  <material name="orange">
+    <color rgba="1.0 0.35 0.02 1"/>
+  </material>
+
+  <material name="purple">
+    <color rgba="0.55 0.1 0.75 1"/>
+  </material>
+
+  <material name="cyan">
+    <color rgba="0.0 0.7 0.8 1"/>
+  </material>
+
+  <material name="gray">
+    <color rgba="0.35 0.35 0.35 1"/>
+  </material>
+
+  <xacro:macro name="default_inertial" params="mass">
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3" />
+    </inertial>
+  </xacro:macro>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder radius="${width}" length="${bodylen}"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="${width}" length="${bodylen}"/>
+      </geometry>
+    </collision>
+    <xacro:default_inertial mass="10"/>
+  </link>
+
+  <xacro:macro name="wheel" params="prefix suffix reflect">
+
+    <link name="${prefix}_${suffix}_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheeldiam/2}" length="0.1"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheeldiam/2}" length="0.1"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <joint name="${prefix}_${suffix}_wheel_joint" type="continuous">
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <parent link="${prefix}_base"/>
+      <child link="${prefix}_${suffix}_wheel"/>
+      <origin xyz="${baselen*reflect/3} 0 -${wheeldiam/2+.05}" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+
+  <xacro:macro name="leg" params="prefix reflect">
+    <link name="${prefix}_leg">
+      <visual>
+        <geometry>
+          <box size="${leglen} 0.1 0.2"/>
+        </geometry>
+        <origin xyz="0 0 -${leglen/2}" rpy="0 ${pi/2} 0"/>
+        <material name="white"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${leglen} 0.1 0.2"/>
+        </geometry>
+        <origin xyz="0 0 -${leglen/2}" rpy="0 ${pi/2} 0"/>
+      </collision>
+      <xacro:default_inertial mass="10"/>
+    </link>
+
+    <joint name="base_to_${prefix}_leg" type="fixed">
+      <parent link="base_link"/>
+      <child link="${prefix}_leg"/>
+      <origin xyz="0 ${reflect*(width+.02)} 0.25" />
+    </joint>
+
+    <link name="${prefix}_base">
+      <visual>
+        <geometry>
+          <box size="${baselen} 0.1 0.1"/>
+        </geometry>
+        <material name="white"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${baselen} 0.1 0.1"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="10"/>
+    </link>
+
+    <joint name="${prefix}_base_joint" type="fixed">
+      <parent link="${prefix}_leg"/>
+      <child link="${prefix}_base"/>
+      <origin xyz="0 0 ${-leglen}" />
+    </joint>
+    <xacro:wheel prefix="${prefix}" suffix="front" reflect="1"/>
+    <xacro:wheel prefix="${prefix}" suffix="back" reflect="-1"/>
+  </xacro:macro>
+  <xacro:leg prefix="right" reflect="-1" />
+  <xacro:leg prefix="left" reflect="1" />
+
+  <joint name="gripper_extension" type="prismatic">
+    <parent link="base_link"/>
+    <child link="gripper_pole"/>
+    <limit effort="1000.0" lower="-${width*2-.02}" upper="0" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz="${width-.01} 0 0.2"/>
+  </joint>
+
+  <link name="gripper_pole">
+    <visual>
+      <geometry>
+        <cylinder length="${polelen}" radius="0.01"/>
+      </geometry>
+      <origin xyz="${polelen/2} 0 0" rpy="0 ${pi/2} 0 "/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${polelen}" radius="0.01"/>
+      </geometry>
+      <origin xyz="${polelen/2} 0 0" rpy="0 ${pi/2} 0 "/>
+    </collision>
+    <xacro:default_inertial mass="0.05"/>
+  </link>
+
+  <xacro:macro name="gripper" params="prefix reflect">
+    <joint name="${prefix}_gripper_joint" type="revolute">
+      <axis xyz="0 0 ${reflect}"/>
+      <limit effort="1000.0" lower="0.0" upper="0.548" velocity="0.5"/>
+      <origin rpy="0 0 0" xyz="${polelen} ${reflect*0.01} 0"/>
+      <parent link="gripper_pole"/>
+      <child link="${prefix}_gripper"/>
+    </joint>
+    <link name="${prefix}_gripper">
+      <visual>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://tf2_basic/meshes/l_finger.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tf2_basic/meshes/l_finger.dae"/>
+        </geometry>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="0.05"/>
+    </link>
+
+    <joint name="${prefix}_tip_joint" type="fixed">
+      <parent link="${prefix}_gripper"/>
+      <child link="${prefix}_tip"/>
+    </joint>
+    <link name="${prefix}_tip">
+      <visual>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0.09137 0.00495 0"/>
+        <geometry>
+          <mesh filename="package://tf2_basic/meshes/l_finger_tip.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tf2_basic/meshes/l_finger_tip.dae"/>
+        </geometry>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0.09137 0.00495 0"/>
+      </collision>
+      <xacro:default_inertial mass="0.05"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:gripper prefix="left" reflect="1" />
+  <xacro:gripper prefix="right" reflect="-1" />
+
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="${width}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="${width}"/>
+      </geometry>
+    </collision>
+    <xacro:default_inertial mass="2"/>
+  </link>
+
+  <joint name="head_swivel" type="continuous">
+    <parent link="base_link"/>
+    <child link="head"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 ${bodylen/2}"/>
+  </joint>
+
+  <link name="box">
+    <visual>
+      <geometry>
+        <box size="0.08 0.08 0.08"/>
+      </geometry>
+      <material name="blue"/>
+      <origin xyz="-0.04 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.08 0.08 0.08"/>
+      </geometry>
+    </collision>
+    <xacro:default_inertial mass="1"/>
+  </link>
+
+  <joint name="tobox" type="fixed">
+    <parent link="head"/>
+    <child link="box"/>
+    <origin xyz="${.707*width+0.04} 0 ${.707*width}"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.01 0.03 0.03"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="box"/>
+    <child link="camera_link"/>
+    <origin xyz="0 0 0.04" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo reference="camera_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    <parent link="camera_link"/>
+    <child link= "camera_link_optical"/>
+  </joint>
+
+  <link name="camera_link_optical"/>
+  <!-- 팔 치수 및 질량 -->
+  <xacro:property name="upper_arm_len" value="0.2"/>
+  <xacro:property name="lower_arm_len" value="0.2"/>
+  <xacro:property name="upper_arm_width" value="0.055"/>
+  <xacro:property name="upper_arm_depth" value="0.060"/>
+  <xacro:property name="lower_arm_width" value="0.045"/>
+  <xacro:property name="lower_arm_depth" value="0.050"/>
+  <xacro:property name="upper_arm_mass" value="0.45"/>
+  <xacro:property name="lower_arm_mass" value="0.35"/>
+  <xacro:property name="shoulder_mass" value="0.10"/>
+  <xacro:property name="elbow_mass" value="0.08"/>
+  <xacro:property name="hand_mass" value="0.15"/>
+  <xacro:property name="shoulder_radius" value="0.045"/>
+  <xacro:property name="shoulder_length" value="0.075"/>
+  <xacro:property name="elbow_radius" value="0.035"/>
+  <xacro:property name="elbow_length" value="0.065"/>
+
+  <!-- 실린더 중심축이 로컬 z축일 때의 관성 -->
+  <xacro:macro name="cylinder_inertial" params="mass radius length origin_xyz:='0 0 0' origin_rpy:='0 0 0'">
+    <inertial>
+      <origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+      <mass value="${mass}"/>
+      <inertia
+        ixx="${mass * (3.0*radius*radius + length*length) / 12.0}"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="${mass * (3.0*radius*radius + length*length) / 12.0}"
+        iyz="0.0"
+        izz="${mass * radius*radius / 2.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- side: right 또는 left, reflect: right=-1 / left=1 -->
+  <xacro:macro name="arm" params="side reflect upper_material lower_material joint_material hand_material">
+
+    <link name="${side}_arm_shoulder_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${shoulder_radius}" length="${shoulder_length}"/>
+        </geometry>
+        <material name="${joint_material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${shoulder_radius}" length="${shoulder_length}"/>
+        </geometry>
+      </collision>
+      <!-- 실린더가 y축 방향이므로 inertial frame도 동일하게 회전 -->
+      <xacro:cylinder_inertial
+        mass="${shoulder_mass}"
+        radius="${shoulder_radius}"
+        length="${shoulder_length}"
+        origin_rpy="${pi/2} 0 0"/>
+    </link>
+
+    <joint name="${side}_leg_to_arm_shoulder_joint" type="fixed">
+      <parent link="${side}_leg"/>
+      <child link="${side}_arm_shoulder_link"/>
+      <origin xyz="0 ${reflect*0.09} -0.05" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${side}_arm_upper_link">
+      <visual>
+        <origin xyz="0 0 -${upper_arm_len/2.0}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${upper_arm_width} ${upper_arm_depth} ${upper_arm_len}"/>
+        </geometry>
+        <material name="${upper_material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -${upper_arm_len/2.0}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${upper_arm_width} ${upper_arm_depth} ${upper_arm_len}"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial
+        mass="${upper_arm_mass}"
+        x="${upper_arm_width}"
+        y="${upper_arm_depth}"
+        z="${upper_arm_len}"
+        origin_xyz="0 0 -${upper_arm_len/2.0}"/>
+    </link>
+
+    <joint name="${side}_arm_shoulder_revolute_joint" type="revolute">
+      <parent link="${side}_arm_shoulder_link"/>
+      <child link="${side}_arm_upper_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="-1.5708" upper="1.5708" effort="100.0" velocity="1.0"/>
+      <dynamics damping="0.2" friction="0.1"/>
+    </joint>
+
+    <link name="${side}_arm_elbow_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${elbow_radius}" length="${elbow_length}"/>
+        </geometry>
+        <material name="${joint_material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${elbow_radius}" length="${elbow_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial
+        mass="${elbow_mass}"
+        radius="${elbow_radius}"
+        length="${elbow_length}"
+        origin_rpy="${pi/2} 0 0"/>
+    </link>
+
+    <joint name="${side}_arm_upper_to_elbow_joint" type="fixed">
+      <parent link="${side}_arm_upper_link"/>
+      <child link="${side}_arm_elbow_link"/>
+      <origin xyz="0 0 -${upper_arm_len}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${side}_arm_lower_link">
+      <visual>
+        <origin xyz="0 0 -${lower_arm_len/2.0}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${lower_arm_width} ${lower_arm_depth} ${lower_arm_len}"/>
+        </geometry>
+        <material name="${lower_material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -${lower_arm_len/2.0}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${lower_arm_width} ${lower_arm_depth} ${lower_arm_len}"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial
+        mass="${lower_arm_mass}"
+        x="${lower_arm_width}"
+        y="${lower_arm_depth}"
+        z="${lower_arm_len}"
+        origin_xyz="0 0 -${lower_arm_len/2.0}"/>
+    </link>
+
+    <!-- URDF에는 elbow라는 joint type이 없으므로 revolute 사용 -->
+    <joint name="${side}_arm_elbow_revolute_joint" type="revolute">
+      <parent link="${side}_arm_elbow_link"/>
+      <child link="${side}_arm_lower_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="0.0" upper="2.61799" effort="80.0" velocity="1.2"/>
+      <dynamics damping="0.15" friction="0.08"/>
+    </joint>
+
+    <link name="${side}_arm_hand_link">
+      <visual>
+        <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.065 0.055 0.070"/>
+        </geometry>
+        <material name="${hand_material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.065 0.055 0.070"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial
+        mass="${hand_mass}"
+        x="0.065"
+        y="0.055"
+        z="0.070"
+        origin_xyz="0 0 -0.035"/>
+    </link>
+
+    <joint name="${side}_arm_wrist_fixed_joint" type="fixed">
+      <parent link="${side}_arm_lower_link"/>
+      <child link="${side}_arm_hand_link"/>
+      <origin xyz="0 0 -${lower_arm_len}" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- leg 링크는 위에서 한 번만 생성되어 있음 -->
+  <xacro:arm
+    side="right"
+    reflect="-1"
+    upper_material="red"
+    lower_material="orange"
+    joint_material="gray"
+    hand_material="yellow"/>
+
+  <xacro:arm
+    side="left"
+    reflect="1"
+    upper_material="green"
+    lower_material="cyan"
+    joint_material="purple"
+    hand_material="yellow"/>
+
+</robot>

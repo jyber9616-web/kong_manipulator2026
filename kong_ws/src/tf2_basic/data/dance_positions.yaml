@@ -1,0 +1,68 @@
+# OpenManipulator-X 춤 자세 데이터
+# position 단위: rad, gripper 단위: m
+
+joint_names: [joint1, joint2, joint3, joint4]
+
+# open_manipulator_x_arm.urdf.xacro의 제한값과 동일하다.
+joint_limits:
+  joint1: [-3.14159265359, 3.14159265359]
+  joint2: [-1.5, 1.5]
+  joint3: [-1.5, 1.4]
+  joint4: [-1.7, 1.97]
+gripper_limits: [-0.011, 0.02]
+
+randomization:
+  variation_ratio: 0.05
+  # 기준값이 0일 때도 작은 변화가 생기도록 하는 최소 변동값
+  minimum_joint_jitter: 0.01
+  minimum_gripper_jitter: 0.0002
+  # 매 cycle마다 패턴 순서를 섞는다.
+  shuffle_patterns: true
+  # 패턴의 춤 모양을 유지하기 위해 step 순서는 유지한다.
+  shuffle_steps: false
+
+execution:
+  # 0이면 Ctrl+C로 종료할 때까지 반복한다.
+  repeat_count: 0
+  default_duration: 1.0
+  default_pause: 0.08
+  gripper_max_effort: 10.0
+
+patterns:
+  # duration이 작을수록 빠르게 이동하고, pause 동안 목표 자세에서 멈춘다.
+  # 빠른 동작도 관절 속도 제한(4.8 rad/s)보다 충분히 낮도록 구성했다.
+  - name: left_right_wave
+    steps:
+      # 천천히 준비한 뒤 좌우로 빠르게 흔들고 마지막 자세에서 정지
+      - {positions: [0.45, -0.85, 0.75, 0.30], gripper: 0.018, duration: 1.20, pause: 0.15}
+      - {positions: [-0.45, -0.85, 0.75, -0.30], gripper: 0.006, duration: 0.48, pause: 0.04}
+      - {positions: [0.55, -0.75, 0.65, 0.35], gripper: 0.018, duration: 0.45, pause: 0.04}
+      - {positions: [-0.55, -0.75, 0.65, -0.35], gripper: 0.006, duration: 0.45, pause: 0.08}
+      - {positions: [0.00, -0.65, 0.55, 0.00], gripper: 0.018, duration: 0.80, pause: 0.90}
+
+  - name: shoulder_bounce
+    steps:
+      # 짧은 duration으로 두 번 튕긴 후 마지막 자세를 길게 유지
+      - {positions: [0.25, -1.05, 1.05, 0.35], gripper: 0.012, duration: 0.75, pause: 0.08}
+      - {positions: [-0.25, -0.55, 0.35, -0.35], gripper: 0.018, duration: 0.42, pause: 0.03}
+      - {positions: [0.25, -1.05, 1.05, 0.35], gripper: 0.004, duration: 0.42, pause: 0.03}
+      - {positions: [-0.25, -0.55, 0.35, -0.35], gripper: 0.018, duration: 0.42, pause: 0.03}
+      - {positions: [0.25, -1.05, 1.05, 0.35], gripper: 0.004, duration: 0.42, pause: 0.10}
+      - {positions: [0.00, -0.75, 0.70, 0.00], gripper: 0.018, duration: 0.75, pause: 1.00}
+
+  - name: gripper_clap
+    steps:
+      # gripper 상한에 여유를 두고 빠른 여닫기와 정지 동작 구성
+      - {positions: [0.60, -0.90, 0.85, 0.50], gripper: 0.018, duration: 0.85, pause: 0.05}
+      - {positions: [0.60, -0.90, 0.85, 0.50], gripper: -0.006, duration: 0.35, pause: 0.28, max_effort: 5.0}
+      - {positions: [0.60, -0.90, 0.85, 0.50], gripper: 0.018, duration: 0.35, pause: 0.06}
+      - {positions: [-0.60, -0.70, 0.60, -0.50], gripper: -0.006, duration: 0.62, pause: 0.28, max_effort: 5.0}
+      - {positions: [-0.60, -0.70, 0.60, -0.50], gripper: 0.018, duration: 0.35, pause: 0.75}
+
+  - name: center_twist
+    steps:
+      # 느린 회전 준비, 빠른 반대 회전, 중앙 포즈 정지
+      - {positions: [0.75, -0.80, 0.65, -0.55], gripper: 0.010, duration: 1.10, pause: 0.18}
+      - {positions: [-0.75, -0.80, 0.65, 0.55], gripper: 0.018, duration: 0.62, pause: 0.06}
+      - {positions: [0.65, -0.95, 0.90, -0.45], gripper: 0.008, duration: 0.55, pause: 0.06}
+      - {positions: [0.00, -1.00, 1.00, 0.00], gripper: 0.015, duration: 0.80, pause: 0.95}

@@ -4,15 +4,29 @@
   <name>tf2_basic</name>
   <version>0.0.0</version>
   <description>tf2 basic for tutorial</description>
-  <maintainer email="jyber9616@gmail.com">ju</maintainer>
+  <maintainer email="student@example.com">student</maintainer>
   <license>Apache 2.0</license>
 
-  <depend>geometry_msgs</depend>
-  <depend>rclpy</depend>
-  <depend>sensor_msgs</depend>
-  <depend>tf2_ros</depend>
-  <depend>turtlesim</depend>
+  <exec_depend>action_msgs</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>moveit_configs_utils</exec_depend>
+  <exec_depend>moveit_py</exec_depend>
+  <exec_depend>open_manipulator_description</exec_depend>
+  <exec_depend>open_manipulator_moveit_config</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>tf2_py</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>turtlesim</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
