@@ -19,18 +19,15 @@ class OpenManipulatorMoveItNode(Node):
         self.moveit = MoveItPy(node_name="open_manipulator_moveit_py")
         self.arm = self.moveit.get_planning_component("arm")
         self.gripper = self.moveit.get_planning_component("gripper")
-        self.arm_robot_state1 = {
-            "joint1": -1.724194,
-            "joint2": -0.289922,
-            "joint3": 0.136524,
-            "joint4": 0.633534,
-        }
         self.planning_scene_monitor = self.moveit.get_planning_scene_monitor()
-        self.add_table()
-        self.add_wall()
         self.object_id = "grasped_box"
         self.attach_link = "end_effector_link"
-        self.touch_links = ["end_effector_link", "gripper_left_link", "gripper_right_link"]
+        self.touch_links = [
+            "link5",
+            "end_effector_link",
+            "gripper_left_link",
+            "gripper_right_link",
+        ]
 
         self.move_manipulator()
 
@@ -44,18 +41,24 @@ class OpenManipulatorMoveItNode(Node):
             controller_name="arm_controller",
         )
         # 물체 집기 직전 자세 1
+        #  1.0691846091560846
+        # - 0.24850488763726686
+        # - 0.6212622190934778
+        # - -0.8682331259434797
         self.plan_and_execute(
             self.moveit,
             self.arm,
             configuration={
-                "joint1": -0.9464661461252337,
-                "joint2": -0.0184077694548348,
-                "joint3": 0.9510680884888902,
-                "joint4": 0.9664078963681608,
+                "joint1": 1.0691846091560846,
+                "joint2": 0.24850488763726686,
+                "joint3": 0.6212622190934778,
+                "joint4": -0.8682331259434797,
             },
             controller_name="arm_controller",
         )
         # 그리퍼 열기
+        self.add_table()
+        self.add_wall()
         self.plan_and_execute(
             self.moveit,
             self.gripper,
@@ -63,10 +66,17 @@ class OpenManipulatorMoveItNode(Node):
             controller_name="gripper_controller",
         )
         # 물체 집기 직전 자세 2
-        # - 0.8452234141247814
-        # - 0.44485442848662915
-        # - 0.4126408319410304
-        # - -0.8283496254584533
+        self.plan_and_execute(
+            self.moveit,
+            self.arm,
+            configuration={
+                "joint1": 1.0691846091560846,
+                "joint2": 0.24850488763726686,
+                "joint3": 0.6212622190934778,
+                "joint4": -0.8682331259434797,
+            },
+            controller_name="arm_controller",
+        )
         # 그리퍼 닫기
         self.plan_and_execute(
             self.moveit,
@@ -77,15 +87,18 @@ class OpenManipulatorMoveItNode(Node):
         # 물체를 로봇 부착
         self.attach_object()
         # 물체를 든 상태로 이동 ( 회피 plane)
-        # todo 목표 위치 확인
+        # -0.9725438195197036
+        # - 0.44485442848662915
+        # - 0.3666214083044612
+        # - -0.8406214717615383
         self.plan_and_execute(
             self.moveit,
             self.arm,
             configuration={
-                "joint1": -0.9464661461252337,
-                "joint2": -0.0184077694548348,
-                "joint3": 0.9510680884888902,
-                "joint4": 0.9664078963681608,
+                "joint1": -0.9725438195197036,
+                "joint2": 0.44485442848662915,
+                "joint3": 0.3666214083044612,
+                "joint4": -0.8406214717615383,
             },
             controller_name="arm_controller",
         )
@@ -99,8 +112,15 @@ class OpenManipulatorMoveItNode(Node):
         # attached object 제거
         self.detach_object()
         # world에 box 다시 추가
-        # todo 목표 위치 확인
-        self.add_placed_object(0.1, 0.2, 0.3)
+        self.add_pick_object()
+        self.add_placed_object(0.2, -0.2, 0.065)
+        # 초기 위치 이동
+        self.plan_and_execute(
+            self.moveit,
+            self.arm,
+            configuration="init",
+            controller_name="arm_controller",
+        )
 
     def plan_and_execute(
         self,
@@ -143,7 +163,7 @@ class OpenManipulatorMoveItNode(Node):
         table_pose = Pose()
         table_pose.position.x = 0.25
         table_pose.position.y = 0.0
-        table_pose.position.z = -0.025
+        table_pose.position.z = -0.05
 
         table_pose.orientation.x = 0.0
         table_pose.orientation.y = 0.0
@@ -176,7 +196,7 @@ class OpenManipulatorMoveItNode(Node):
 
         wall = SolidPrimitive()
         wall.type = SolidPrimitive.BOX
-        wall.dimensions = [0.4, 0.02, 0.3]  # x, y, z , --m 단위
+        wall.dimensions = [0.4, 0.02, 0.2]  # x, y, z , --m 단위
 
         wall_pose = Pose()
         wall_pose.position.x = 0.3
@@ -247,9 +267,9 @@ class OpenManipulatorMoveItNode(Node):
         box.dimensions = [0.04, 0.04, 0.08]
 
         box_pose = Pose()
-        box_pose.position.x = 0.0
+        box_pose.position.x = 0.02
         box_pose.position.y = 0.0
-        box_pose.position.z = 0.06
+        box_pose.position.z = 0.0
         box_pose.orientation.w = 1.0
 
         attached_object.object.primitives.append(box)  # type: ignore
