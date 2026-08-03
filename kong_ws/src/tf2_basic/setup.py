@@ -37,7 +37,7 @@ setup(
         ("share/" + package_name + "/meshes", glob(os.path.join("meshes", "*.*"))),
         ("share/" + package_name + "/data", glob(os.path.join("data", "*.yaml"))),
         ("share/" + package_name + "/config", glob(os.path.join("config", "*.srdf"))),
-           ("share/" + package_name + "/models", glob(os.path.join("models", "*.*"))),
+        ("share/" + package_name + "/models", glob(os.path.join("models", "*.*"))),
         ("share/" + package_name + "/world", glob(os.path.join("world", "*.*"))),
     ]
     + package_files("models"),
