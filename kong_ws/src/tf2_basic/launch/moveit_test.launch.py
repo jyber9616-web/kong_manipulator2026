@@ -95,8 +95,13 @@ def generate_launch_description() -> LaunchDescription:
     return LaunchDescription(
         [
             DeclareLaunchArgument(
-                "use_sim_time",
+                "use_sim",
                 default_value="false",
+                description="use_sim_time의 별칭(하위호환)",
+            ),
+            DeclareLaunchArgument(
+                "use_sim_time",
+                default_value=LaunchConfiguration("use_sim"),
                 description="Gazebo의 /clock 사용 여부",
             ),
             moveit_py_node,

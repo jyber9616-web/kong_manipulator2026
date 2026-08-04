@@ -36,6 +36,7 @@ setup(
         ("share/" + package_name + "/rviz", glob(os.path.join("rviz", "*.*"))),
         ("share/" + package_name + "/meshes", glob(os.path.join("meshes", "*.*"))),
         ("share/" + package_name + "/data", glob(os.path.join("data", "*.yaml"))),
+        ("share/" + package_name + "/data", glob(os.path.join("data", "*.srdf"))),
         ("share/" + package_name + "/config", glob(os.path.join("config", "*.srdf"))),
         ("share/" + package_name + "/models", glob(os.path.join("models", "*.*"))),
         ("share/" + package_name + "/world", glob(os.path.join("world", "*.*"))),
@@ -73,6 +74,8 @@ setup(
             "moveit_scene_monitor = tf2_basic.moveit_scene_monitor:main",
             "moveit_attached = tf2_basic.moveit_attached:main",
             "moveit_mini_project = tf2_basic.moveit_mini_project:main",
+            "moveit_class_thread = tf2_basic.moveit_class_thread:main",
+            "moveit_mini_project_thread = tf2_basic.moveit_mini_project_thread:main",
         ],
     },
 )

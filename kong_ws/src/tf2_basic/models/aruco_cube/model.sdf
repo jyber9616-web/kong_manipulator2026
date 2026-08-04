@@ -19,6 +19,18 @@
             </surface>
         </collision>
 
+        <inertial>
+            <mass>0.05</mass>
+            <inertia>
+                <ixx>0.000018</ixx>
+                <iyy>0.000018</iyy>
+                <izz>0.000018</izz>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyz>0</iyz>
+            </inertia>
+        </inertial>
+
         <visual name="cube_visual">
             <geometry>
                 <box>

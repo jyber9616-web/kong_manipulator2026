@@ -29,6 +29,7 @@ def main():
         if cv2.waitKey(30) == ord("q"):
             break
         a += 1
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

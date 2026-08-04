@@ -1,0 +1,41 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/open_manipulator_playground/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/robotis_interfaces/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/open_manipulator_gui/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/open_manipulator_collision/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/om_spring_actuator_controller/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/om_joint_trajectory_command_broadcaster/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/om_gravity_compensation_controller/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/dynamixel_sdk_custom_interfaces/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/dynamixel_hardware_interface/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/dynamixel_sdk/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/install/dynamixel_interfaces/include/**",
+        "/home/ju/kong_manipulator2026/gong_ws/install/user_interface/include/**",
+        "/opt/ros/jazzy/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/DynamixelSDK/ros/dynamixel_sdk/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/DynamixelSDK/ros/dynamixel_sdk_examples/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/dynamixel_hardware_interface/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/open_manipulator/open_manipulator_collision/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/open_manipulator/open_manipulator_gui/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/open_manipulator/open_manipulator_playground/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/open_manipulator/ros2_controller/om_gravity_compensation_controller/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/open_manipulator/ros2_controller/om_joint_trajectory_command_broadcaster/include/**",
+        "/home/ju/kong_manipulator2026/open_manipulator_ws/src/open_manipulator/ros2_controller/om_spring_actuator_controller/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ros2",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}

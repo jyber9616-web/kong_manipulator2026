@@ -1,14 +1,12 @@
-from pathlib import Path
-
 import cv2
 import numpy as np
 
 
 def main():
-    file_path = Path(__file__).parent
-    black_img = np.zeros((300, 300, 1), dtype=np.uint8)
-    cv2.imshow("black", black_img)
+    img = np.zeros((500, 500, 1), dtype=np.uint8)
+    cv2.imshow("img", img)
     cv2.waitKey()  # 블럭 함수
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
