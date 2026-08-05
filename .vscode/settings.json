@@ -12,5 +12,6 @@
     "${workspaceFolder}/kong_ws/install/user_interface/lib/python3.12/site-packages"
   ],
   "python.analysis.stubPath": "${workspaceFolder}/typings",
-  "cmake.sourceDirectory": "/home/ju/kong_manipulator2026/kong_ws/src/user_interface"
+  "cmake.sourceDirectory": "/home/ju/kong_manipulator2026/kong_ws/src/user_interface",
+  "python-envs.defaultEnvManager": "ms-python.python:venv"
 }
