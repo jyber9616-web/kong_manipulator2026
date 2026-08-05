@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<sdf version="1.10">
+  <world name="aruco_world">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.005</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>500</real_time_update_rate>
+    </physics>
+
+    <plugin name="gz::sim::systems::Physics"
+            filename="gz-sim-physics-system"/>
+    <plugin name="gz::sim::systems::UserCommands"
+            filename="gz-sim-user-commands-system"/>
+    <plugin name="gz::sim::systems::SceneBroadcaster"
+            filename="gz-sim-scene-broadcaster-system"/>
+    <plugin name="gz::sim::systems::Contact"
+            filename="gz-sim-contact-system"/>
+    <plugin name="gz::sim::systems::Sensors"
+            filename="gz-sim-sensors-system">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <gravity>0 0 -9.8</gravity>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Original 5 cm box with a 4 cm DICT_4X4_50 / ID 0 marker on top. -->
+    <model name="aruco_cube">
+      <pose>0.35 0 0.025 0 0 0</pose>
+      <link name="cube_link">
+        <collision name="cube_collision">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>15</mu>
+                <mu2>15</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.000018</ixx>
+            <iyy>0.000018</iyy>
+            <izz>0.000018</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+        </inertial>
+
+        <visual name="cube_visual">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.05 0.25 0.95 1</ambient>
+            <diffuse>0.05 0.35 1.0 1</diffuse>
+            <specular>0.15 0.15 0.15 1</specular>
+          </material>
+        </visual>
+
+        <visual name="aruco_top_visual">
+          <pose>0 0 0.0251 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.04 0.0001</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <pbr>
+              <metal>
+                <albedo_map>aruco_0.png</albedo_map>
+                <roughness>1.0</roughness>
+                <metalness>0.0</metalness>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1.0</intensity>
+      <direction>-0.5 0.1 -0.9</direction>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+    </light>
+
+    <gui>
+      <camera name="user_camera">
+        <pose>0.9 -0.9 0.65 0 0.48 2.35</pose>
+      </camera>
+    </gui>
+  </world>
+</sdf>
